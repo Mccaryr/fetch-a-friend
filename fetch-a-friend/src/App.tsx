@@ -7,7 +7,7 @@ function App() {
  const {loggedIn} = useAuth();
   return (
     <>
-        {!loggedIn ?
+        {loggedIn ?
             <Dashboard />
             :
             <Login />
