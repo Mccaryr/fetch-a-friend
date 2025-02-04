@@ -29,8 +29,15 @@ export const getDogsSearch = async (params: any) => {
          name
          age
          Ex: sort=breed:asc **/
-
-        const response = await axios.get(`${apiURL}/dogs/search`, params);
+        let filters = {
+            breeds: [params.breed],
+            ageMin: params.ageMin,
+            ageMax: params.ageMax,
+            sort: `breed:${params.sorted}`
+        }
+        const response = await axios.get(`${apiURL}/dogs/search`,
+            {params: filters}
+        );
         return response.data;
     } catch(e) {
         console.log("Error getting dog IDs", e)

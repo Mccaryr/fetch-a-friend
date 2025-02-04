@@ -2,7 +2,7 @@ import DogList from "../DogList/DogList.tsx";
 import {useAuth} from "../../auth/AuthContext.tsx";
 import PetFilter from "../PetFilter/PetFilter.tsx";
 import {useEffect, useState} from "react";
-import {getDogs, getMatch} from "../../api/api.ts";
+import {getDogs, getDogsSearch} from "../../api/api.ts";
 import DogOfDestiny from "../DogOfDestiny/DogOfDestiny.tsx";
 import Instructions from "../Instructions/Instructions.tsx";
 import "./Dashboard.scss"
@@ -10,24 +10,24 @@ import {Dog} from "../../types.ts";
 
 const Dashboard = () => {
     const {logout} = useAuth()
-    const [filters, setFilters] = useState<{breed: string | null; maxAge: number | null; minAge: number | null, range: string | null}>({
-        breed: null, maxAge: null, minAge: null, range: null
+    const [filters, setFilters] = useState<{breed: string | null; maxAge: number | null;
+        minAge: number | null; range: string | null; location: string | null; sorted: string}>({
+        breed: null, maxAge: null, minAge: null, range: null, location: null, sorted: "asc"
     });
-    const [dogData, setDogData] = useState([])
-    const [renderMatch, setRenderMatch] = useState<Dog | null>(null)
+    const [dogData, setDogData] = useState<Dog[]>([])
+    const [renderMatch, setRenderMatch] = useState<string | null>(null)
     const [favorites, setFavorites] = useState<string[]>([]);
 
     const handleFavorite = (value: string) => {
-        if (!favorites.includes(value)) {
-            setFavorites((prevFavorites) => [...prevFavorites, value])
-        }
+        setFavorites((prevFavorites) =>
+            prevFavorites.includes(value) ? prevFavorites.filter((fav) => fav !== value) : [...prevFavorites, value]);
     }
 
-    // useEffect(() => {
-    //     getDogsSearch(filters).then((data) => {
-    //         getDogs(data).then((getDogsData) => setDogData(getDogsData))
-    //     })
-    // }, [filters])
+    useEffect(() => {
+        getDogsSearch(filters).then((data) => {
+            getDogs(data).then((getDogsData) => setDogData(getDogsData))
+        })
+    }, [filters])
 
     return (
         <div className="w-full h-full relative">
@@ -37,7 +37,7 @@ const Dashboard = () => {
                 <div style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
                     <Instructions />
                     <PetFilter filters={filters} setFilters={setFilters} favorites={favorites} setRenderMatch={setRenderMatch} />
-                    <DogList data={dogData} handleFavorite={handleFavorite} />
+                    <DogList data={dogData} handleFavorite={handleFavorite} favorites={favorites} />
                 </div>
             }
             </div>

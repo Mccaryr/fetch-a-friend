@@ -5,6 +5,7 @@
   width: 250px;
   height: 25%;
   flex-shrink: 0;
+  background-color: #1a1a1a;
 
   img {
     width: 100%;
@@ -14,6 +15,11 @@
   }
 
   .fav-btn {
+    outline:none;
+
+    .favorited {
+      color:red;
+    }
 
     &:hover {
       color:red;

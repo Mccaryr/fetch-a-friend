@@ -11,8 +11,9 @@ type DogCardProps = {
         zip_code: string,
     },
     handleFavorite: (id: string) => void,
+    favorites: string[]
 }
-const DogCard:React.FC<DogCardProps> = ({dog, handleFavorite}) => {
+const DogCard:React.FC<DogCardProps> = ({dog, handleFavorite, favorites}) => {
     return (
         <div style={{borderRadius: "10px"}} className="dog-card">
             <div>
@@ -26,7 +27,7 @@ const DogCard:React.FC<DogCardProps> = ({dog, handleFavorite}) => {
                 <p>Breed:{dog.breed}</p>
                 <p>Zip:{dog.zip_code}</p>
             </div>
-            <button className={"fav-btn"} onClick={() => handleFavorite(dog.id)}><i className="fa-solid fa-heart"/>
+            <button className={"fav-btn"} onClick={() => handleFavorite(dog.id)}><i className={`fa-solid fa-heart ${favorites.includes(dog.id) ? `favorited` : ``}`}/>
             </button>
         </div>
     )

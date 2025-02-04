@@ -1,28 +1,40 @@
 import {Dog} from "../../types.ts";
+import './DogOfDestiny.scss'
+import {useEffect, useState} from "react";
+import {getDogs} from "../../api/api.ts";
 
-type DogOfDestinyProps =  {match:Dog; setRenderMatch: (value: null | Dog) => void };
+type DogOfDestinyProps =  {match: string; setRenderMatch: (value: null | string) => void };
 
 const DogOfDestiny = ({match, setRenderMatch}: DogOfDestinyProps) => {
-    const {name, img, age, zip_code, breed} = match;
+    const [destinyDog, setDestinyDog] = useState<Dog | null>(null);
+
+    useEffect(() => {
+        getDogs([match]).then((data) => {
+            setDestinyDog(data);
+        })
+    }, [match]);
+
     return (
+        <div className={"background"}>
         <div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
-            <h1>{`Your soulmate is ${name}!`}</h1>
+            <h1>{`Your soulmate is ${destinyDog?.name}!`}</h1>
             <button style={{marginLeft: '17rem', borderRadius: '1rem', backgroundColor:'transparent'}} onClick={() => setRenderMatch(null)}>
                 <i style={{fontSize: '40px'}} className="fa-solid fa-xmark" />
             </button>
             <div style={{borderRadius: "10px"}} className="dog-card">
                 <div>
-                    <img src={img} alt={`${name} image`}/>
+                    <img src={destinyDog?.img} alt={`${destinyDog?.name} image`}/>
                 </div>
                 <div className="flex flex-row justify-evenly">
-                    <p>Name:{name}</p>
-                    <p>Age:{age}</p>
+                    <p>Name:{destinyDog?.name}</p>
+                    <p>Age:{destinyDog?.age}</p>
                 </div>
                 <div className="flex flex-row justify-evenly">
-                    <p>Breed:{breed}</p>
-                    <p>Zip:{zip_code}</p>
+                    <p>Breed:{destinyDog?.breed}</p>
+                    <p>Zip:{destinyDog?.zip_code}</p>
                 </div>
             </div>
+        </div>
         </div>
     )
 }
