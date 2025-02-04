@@ -1,7 +1,8 @@
 
-import {getMatch} from "@/api/api.ts";
+import {getMatch} from "../../api/api.ts";
 import {useState} from "react";
-import DogCard from "@/components/DogCard.tsx";
+import DogCard from "../DogCard/DogCard.tsx";
+import './DogList.scss'
 
 const dogTestData = [
     {
@@ -48,13 +49,17 @@ export const DogList:React.FC<TableDemoProps> = ({data, handleFavorite}) => {
 
     return (
         <>
-        <div className="flex flex-wrap justify-evenly">
+        <div style={{gap:'1rem'}} className="flex flex-wrap justify-evenly">
             {dogTestData.map((dog) => (
                 <DogCard dog={dog} handleFavorite={handleFavorite} />
             ))}
         </div>
-    </>
-)
+            <div className={"nav-arrows-container"}>
+                <button><i className="fa-regular fa-circle-left"></i></button>
+                <button><i className="fa-regular fa-circle-right"></i></button>
+            </div>
+        </>
+    )
 }
 
 export default DogList;

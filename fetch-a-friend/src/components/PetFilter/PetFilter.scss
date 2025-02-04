@@ -1,0 +1,39 @@
+label {
+    color: lightgray;
+    font-size: 12px;
+    margin-top:4px
+}
+
+input {
+    display: flex;
+    gap: 10px;
+    width: 150px;
+    text-align: center;
+    height: 40px
+}
+
+.dropdown {
+    padding:10px;
+    margin-top:10px
+}
+
+.breed-sort-container {
+    display:flex;
+    flex-direction:column;
+    margin-top:5px;
+
+    button {
+        background-color:transparent;
+        height:20px;
+        outline: none;
+
+        i {
+            font-size: 20px;
+            margin-top: 10px
+        }
+    }
+}
+
+.sorting {
+    color: #5e5eee;
+}

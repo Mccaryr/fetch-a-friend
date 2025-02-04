@@ -1,6 +1,6 @@
 import {Formik} from "formik";
 import * as Yup from "yup";
-import {useAuth} from "@/auth/AuthContext.tsx";
+import {useAuth} from "../auth/AuthContext.tsx";
 
 const Login = () => {
 
