@@ -15,11 +15,17 @@ const Instructions = () => {
 
             </div>
             {showInstructions && (
-                <div>
-                    To get your paws on your fur-ever friend you can filter by distance, age, and breed
-                    to view a list of awesome doggos. You can then click on the heart to <span>favorite</span>
-                    the ones you've fallen in love with. Then you can press the "Find Fur-ever friend" button that will use
-                    our state of the art AI to match you with your new best friend.
+                <div className={"instructions"}>
+                    <p> To get your <i className="fa-solid fa-paw"></i> on your fur-ever friend you can use the filters below
+                        to view a list of awesome doggos.
+                    </p>
+                    <p>
+                        You can then click on the <i className="fa-solid fa-heart"/> to <span>favorite </span>
+                        the ones you've fallen in love with.
+                    </p>
+                    <p>
+                    Then you can press the <strong>"Find Fur-ever friend"</strong> button that will match you with your new bff.
+                    </p>
                 </div>
             )}
         </div>

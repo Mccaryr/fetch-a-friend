@@ -3,9 +3,10 @@ import {useAuth} from "../../auth/AuthContext.tsx";
 import PetFilter from "../PetFilter/PetFilter.tsx";
 import {useEffect, useState} from "react";
 import {getDogs, getMatch} from "../../api/api.ts";
-import DogOfDestiny from "../DogOfDestiny.tsx";
+import DogOfDestiny from "../DogOfDestiny/DogOfDestiny.tsx";
 import Instructions from "../Instructions/Instructions.tsx";
 import "./Dashboard.scss"
+import {Dog} from "../../types.ts";
 
 const Dashboard = () => {
     const {logout} = useAuth()
@@ -13,7 +14,7 @@ const Dashboard = () => {
         breed: null, maxAge: null, minAge: null, range: null
     });
     const [dogData, setDogData] = useState([])
-    const [renderMatch, setRenderMatch] = useState(false)
+    const [renderMatch, setRenderMatch] = useState<Dog | null>(null)
     const [favorites, setFavorites] = useState<string[]>([]);
 
     const handleFavorite = (value: string) => {
@@ -31,7 +32,7 @@ const Dashboard = () => {
     return (
         <div className="w-full h-full relative">
             <div style={{padding:'2rem'}}>
-            {renderMatch &&  <DogOfDestiny />}
+            {renderMatch &&  <DogOfDestiny match={renderMatch} setRenderMatch={setRenderMatch} />}
             {!renderMatch &&
                 <div style={{display:"flex", flexDirection:"column", gap:"1rem"}}>
                     <Instructions />

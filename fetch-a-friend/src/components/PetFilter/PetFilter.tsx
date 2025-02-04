@@ -3,12 +3,13 @@ import {useEffect, useState} from "react";
 import {getDogBreeds, getMatch} from "../../api/api.ts";
 import "./PetFilter.scss"
 import Button from "../Button/Button.tsx";
+import {Dog} from "../../types.ts";
 
 type PetFilterProps = {
     filters: {breed: string | null, range: string | null},
     setFilters: (filters: any) => void;
     favorites: string[],
-    setRenderMatch: (value: boolean) => void
+    setRenderMatch: (value: Dog | null) => void
 }
 const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, setRenderMatch}) => {
 
@@ -26,9 +27,15 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
     // }, []);
 
     const handleMatch = () => {
-        getMatch(favorites).then(() => {
-            setRenderMatch(true)
-        })
+        // getMatch(favorites).then((data) => {
+        //     setRenderMatch(data)
+        // })
+        setRenderMatch({ "img": "https://frontend-take-home.fetch.com/dog-images/n02085620-Chihuahua/n02085620_10976.jpg",
+            "name": "Emory",
+            "age": 10,
+            "breed": "Chihuahua",
+            "zip_code": "48333",
+            "id": "VXGFTIcBOvEgQ5OCx40W"})
     }
 
     return (
@@ -121,7 +128,7 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                 </div>
                 {favorites.length > 0 &&
                     <div style={{marginTop: '15px', marginBottom: '15px'}}>
-                        <Button type="button" action={handleMatch} text={"Find Fur-ever friend!"}/>
+                        <Button type="button" action={() => handleMatch()} text={"Find Fur-ever friend!"}/>
                     </div>
                 }
             </div>

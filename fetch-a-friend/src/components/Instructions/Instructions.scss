@@ -16,6 +16,19 @@
   }
 }
 
+.instructions {
+  white-space:normal;
+  text-align:left;
+  padding-left:2rem;
+  margin:0 20vw;
+
+  @media (max-width: 768px) {
+    margin: 0 0vw;
+    padding-left: 1rem;
+    font-size: 1rem;
+  }
+}
+
 @keyframes gradientAnimation {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
