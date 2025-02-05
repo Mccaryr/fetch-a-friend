@@ -10,7 +10,7 @@ const DogOfDestiny = ({match, setRenderMatch}: DogOfDestinyProps) => {
 
     useEffect(() => {
         getDogs([match]).then((data) => {
-            setDestinyDog(data);
+            setDestinyDog(data[0]);
         })
     }, [match]);
 

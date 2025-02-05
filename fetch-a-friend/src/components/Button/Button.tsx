@@ -3,12 +3,13 @@ import "./Button.scss"
 
 type ButtonProps = {
     text: string,
-    type: "submit" | "button"
-    action: () => void
+    type: "submit" | "button",
+    disabled?: boolean,
+    action?: () => void
 }
-const Button:React.FC<ButtonProps> = ({text, type, action}) => {
+const Button:React.FC<ButtonProps> = ({text, type, action, disabled}) => {
     return (
-        <button className="btn" type={type} onClick={action}>{text}</button>
+        <button className="btn" type={type} disabled={disabled} onClick={action}>{text}</button>
     )
 }
 export default Button

@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import {useAuth} from "../../auth/AuthContext.tsx";
 import "./Login.scss"
 import DogWallpaper from "../../assets/faf-wallpaper.jpg"
+import Button from "../Button/Button.tsx";
 
 const Login = () => {
 
@@ -56,7 +57,7 @@ const Login = () => {
                             placeholder={"Enter Name"}
                         />
                         </label>
-                            <p style={{color:'red', margin:0}}>{errors.name && touched.name && errors.name}</p>
+                            <p style={{color:'white', margin:0}}>{errors.name && touched.name && errors.name}</p>
                         </div>
                         <div>
                         <label>Email
@@ -70,11 +71,9 @@ const Login = () => {
                             placeholder={"Enter Email"}
                         />
                         </label>
-                            <p style={{color: 'red', margin:0}}>{errors.email && touched.email && errors.email}</p>
+                            <p style={{color: 'white', margin:0}}>{errors.email && touched.email && errors.email}</p>
                         </div>
-                        <button type="submit" disabled={isSubmitting}>
-                            Login
-                        </button>
+                        <Button type={"submit"} disabled={isSubmitting} text={"Login"} />
                     </form>
                 )}
             </Formik>

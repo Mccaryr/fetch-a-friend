@@ -2,7 +2,7 @@ import  {useState} from 'react'
 import './Instructions.scss'
 
 const Instructions = () => {
-    const [showInstructions, setShowInstructions] = useState<boolean>(false)
+    const [showInstructions, setShowInstructions] = useState<boolean>(true)
     return (
         <div>
             <div style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
@@ -12,7 +12,6 @@ const Instructions = () => {
                     <i className="fa-solid fa-caret-right"></i>
                 </button>
                 <h1>How it Works</h1>
-
             </div>
             {showInstructions && (
                 <div className={"instructions"}>

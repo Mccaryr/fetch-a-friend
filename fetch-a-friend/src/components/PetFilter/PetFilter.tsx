@@ -1,18 +1,22 @@
 import Select from 'react-select'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {getDogBreeds, getMatch} from "../../api/api.ts";
 import "./PetFilter.scss"
 import Button from "../Button/Button.tsx";
+import US_STATES from "../../constants/constants.ts";
 
 type PetFilterProps = {
-    filters: {breed: string | null, range: string | null, sorted: string},
+    filters: {breed: string | null, sorted: string},
     setFilters: (filters: any) => void;
     favorites: string[],
-    setRenderMatch: (value: string | null) => void
+    setRenderMatch: (value: string | null) => void,
+    setLocation: (value: any) => void,
+    location: {state: string, city: string} | null
 }
-const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, setRenderMatch}) => {
+const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, setRenderMatch, setLocation, location}) => {
 
     const [dogBreedOptions, setDogBreedOptions] = useState<{label: string, value: string}[]>([]);
+    const [cityVal, setCityVal] = useState<string | null>(null);
 
     useEffect(() => {
         getDogBreeds().then((data) => {
@@ -23,54 +27,64 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
         })
     }, []);
 
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if(cityVal?.trim() !== location?.city) {
+                setLocation((prevFilters: any) => ({...prevFilters, city: cityVal}))
+            }
+        }, 500)
+        return () => clearTimeout(handler)
+    }, [cityVal])
+
+
     const handleMatch = () => {
         getMatch(favorites).then((data) => {
             setRenderMatch(data.match)
         })
-        // setRenderMatch({ "img": "https://frontend-take-home.fetch.com/dog-images/n02085620-Chihuahua/n02085620_10976.jpg",
-        //     "name": "Emory",
-        //     "age": 10,
-        //     "breed": "Chihuahua",
-        //     "zip_code": "48333",
-        //     "id": "VXGFTIcBOvEgQ5OCx40W"})
     }
 
     return (
         <div>
-            <div className="flex flex-row flex-wrap justify-evenly">
-                <div className={"flex flex-row"}>
-                    <label>Location
+            <div style={{display:"flex", gap:"1rem"}} className="flex flex-row flex-wrap justify-evenly">
+                <div style={{gap:'1rem'}} className={"flex flex-row"}>
+                    <label>City
                         <input
                             type="text"
-                            onChange={(e) => setFilters((prevFilters: any) => ({...prevFilters, location: e.target.value}))}
-                            placeholder={"Enter City, State, or Zip"}
+                            onChange={(e) => setCityVal(e.target.value.trim())}
+                            placeholder={"Enter City"}
                         />
                     </label>
+                    <label>State
                     <Select
                         onChange={(e) => {
-                            if (e) setFilters((prevFilters: any) => ({...prevFilters, range: e.value}))
+                            if (e) setLocation((prevFilters: any) => ({...prevFilters, state: e.value}))
                         }}
                         styles={{
                             control: (baseStyles) => ({
                                 ...baseStyles,
-                                height: 50,
+                                height: 55,
                                 fontSize: 16,
                                 width: 120,
                                 color: "black"
                             }),
                             option: (provided) => ({
                                 ...provided,
-                                color: 'black',
+                                color: 'black'
+                            }),
+                            indicatorSeparator: () => ({
+                                display: "none",
+                            }),
+                            valueContainer: (base) => ({
+                                ...base,
+                                padding: 0,
+                                margin:0
                             }),
                         }}
-                        className={"dropdown"}
-                        placeholder={"distance"}
-                        options={[{label: "25 mi", value: "25"}, {label: "50 mi", value: "50"}, {
-                            label: "75 mi",
-                            value: "75"
-                        }, {label: "100 mi", value: "100"}]}
-                        value={filters.range ? {label: `${filters.range} mi`, value: filters.range} : null}
+                        placeholder={"state"}
+                        options={US_STATES}
+                        value={location?.state ? {label: `${location.state}`, value: location.state} : null}
                     />
+                    </label>
                 </div>
                 <label>Age Range
                     <div style={{display: 'flex', gap: '10px'}}>
@@ -80,18 +94,33 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                             type="number"
                             placeholder={"minimum age"}
                             min={0} max={25}
-                            onChange={(e) => setFilters((prevFilters: any) => ({...prevFilters, maxAge: parseInt(e.target.value)}))}
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value);
+                                if (!isNaN(value)) {
+                                    setFilters((prevFilters: any) => ({
+                                        ...prevFilters,
+                                        minAge: parseInt(e.target.value)
+                                    }))
+                                }
+                            }
+                            }
                         />
                         <input
                             style={{width: "100px"}}
                             type="number"
                             placeholder={"maximum age"}
                             min={0} max={25}
-                            onChange={(e) => setFilters((prevFilters: any) => ({...prevFilters, minAge: parseInt(e.target.value)}))}
+                            onChange={(e) => {
+                                const value = parseInt(e.target.value);
+                                if(!isNaN(value)) {
+                                    setFilters((prevFilters: any) => ({...prevFilters, maxAge: parseInt(e.target.value)}))}
+                                }
+                            }
                         />
                     </div>
                 </label>
                 <div style={{display: 'flex'}}>
+                    <label>Breed
                     <Select
                         onChange={(e) => {
                             if (e) setFilters((prevFilters: any) =>({...prevFilters, breed: e.value}))
@@ -99,21 +128,29 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                         styles={{
                             control: (baseStyles) => ({
                                 ...baseStyles,
-                                height: 50,
+                                height: 55,
                                 fontSize: 16,
                                 width: 150,
-                                color: "black"
+                                color: "black",
                             }),
                             option: (provided) => ({
                                 ...provided,
-                                color: 'black',
+                                color: 'black'
+                            }),
+                            indicatorSeparator: () => ({
+                                display: "none",
+                            }),
+                            valueContainer: (base) => ({
+                                ...base,
+                                padding: 0,
+                                margin:0
                             }),
                         }}
-                        className={"dropdown"}
                         placeholder={"breed"}
                         options={dogBreedOptions}
                         value={dogBreedOptions.find((option) => option.value === filters.breed) || null}
                     />
+                    </label>
                     <div className={"breed-sort-container"}>
                     <button onClick={() => setFilters((prevFilters: any) => ({...prevFilters, sorted: "asc"}))}>
                         <i className={`fa-solid fa-sort-up ${filters.sorted === "asc" ? "sorting" : ''}`} />
