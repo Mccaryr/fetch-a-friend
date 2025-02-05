@@ -52,8 +52,12 @@ export const getMatch = async (dogIds: string[]) => {
 
 export const getLocationSearch = async (location: {city: string; state: string}) => {
     try {
+        let submissionObj: {city?: string, states?: string[]} = {}
+        if(location.city) submissionObj["city"]  = location.city;
+        if(location.state) submissionObj["states"]  = [location.state];
+
         const response = await axios.post(`${apiURL}/locations/search`,
-            {city: location.city, states: [location.state]},
+            submissionObj,
             {withCredentials: true});
         return response.data;
     } catch(e) {

@@ -14,17 +14,18 @@ const Dashboard = () => {
         {
             maxAge?: number | null; minAge: number | null;
             sorted: string; size: number;
-            from: number; breed: string | null;
-            zipCodes: string[] | null
+            breed: string | null; zipCodes: string[] | null
         }
         >
     ({
-        breed: null, maxAge: null, minAge: null, sorted: "asc", size:25, from:0, zipCodes: null
+        breed: null, maxAge: null, minAge: null, sorted: "asc", size:25, zipCodes: null
     });
     const [dogData, setDogData] = useState<Dog[]>([])
     const [renderMatch, setRenderMatch] = useState<string | null>(null)
     const [favorites, setFavorites] = useState<string[]>([]);
     const [location, setLocation] = useState<{state: string, city: string} | null>(null)
+    const [totalResults, setTotalResults] = useState<number>(0);
+    const [from, setFrom] = useState<number>(0);
 
     const handleFavorite = (value: string) => {
         setFavorites((prevFavorites) =>
@@ -32,10 +33,20 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        getDogsSearch(filters).then((data) => {
+        const mergedFilters = {...filters, from: 0}
+        getDogsSearch(mergedFilters).then((data) => {
+            setTotalResults(data.total)
             getDogs(data.resultIds).then((getDogsData) => setDogData(getDogsData))
         })
     }, [filters])
+
+    useEffect(() => {
+        const mergedFilters = {...filters, from: from}
+        getDogsSearch(mergedFilters).then((data) => {
+            setTotalResults(data.total)
+            getDogs(data.resultIds).then((getDogsData) => setDogData(getDogsData))
+        })
+    }, [from])
 
     useEffect(() => {
         if(!location) return
@@ -45,8 +56,11 @@ const Dashboard = () => {
              * Then we update state filters with zip array which should fetch results in useEffect
              */
             try {
-                let locationData = await getLocationSearch(location)
-                let zipCodes = locationData.results.map((loc: any) => loc.zip_code).filter((zip: any) => typeof zip === "string");
+                let zipCodes: string[] = []
+                if(location.city || location.state) {
+                    let locationData = await getLocationSearch(location)
+                    zipCodes = locationData.results.map((loc: any) => loc.zip_code).filter((zip: any) => typeof zip === "string");
+                }
                 setFilters((prevFilters: any) => ({...prevFilters, zipCodes: zipCodes}))
             } catch(e) {
                 console.log(e)
@@ -75,7 +89,9 @@ const Dashboard = () => {
                         data={dogData}
                          handleFavorite={handleFavorite}
                         favorites={favorites}
-                        setFilters={setFilters} filters={filters}
+                        filters={filters}
+                        totalResults={totalResults}
+                        setFrom={setFrom} from={from}
                     />
                 </div>
             }

@@ -6,7 +6,7 @@ import Button from "../Button/Button.tsx";
 import US_STATES from "../../constants/constants.ts";
 
 type PetFilterProps = {
-    filters: {breed: string | null, sorted: string},
+    filters: {breed: string | null, sorted: string, maxAge: number | null, minAge: number | null},
     setFilters: (filters: any) => void;
     favorites: string[],
     setRenderMatch: (value: string | null) => void,
@@ -57,7 +57,7 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                     <label>State
                     <Select
                         onChange={(e) => {
-                            if (e) setLocation((prevFilters: any) => ({...prevFilters, state: e.value}))
+                            setLocation((prevFilters: any) => ({...prevFilters, state: e ? e.value : ""}))
                         }}
                         styles={{
                             control: (baseStyles) => ({
@@ -81,6 +81,7 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                             }),
                         }}
                         placeholder={"state"}
+                        isClearable={true}
                         options={US_STATES}
                         value={location?.state ? {label: `${location.state}`, value: location.state} : null}
                     />
@@ -95,13 +96,11 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                             placeholder={"minimum age"}
                             min={0} max={25}
                             onChange={(e) => {
-                                const value = parseInt(e.target.value);
-                                if (!isNaN(value)) {
-                                    setFilters((prevFilters: any) => ({
-                                        ...prevFilters,
-                                        minAge: parseInt(e.target.value)
-                                    }))
-                                }
+                                let value = e.target.value.trim() ? parseInt(e.target.value) : null;
+                                setFilters((prevFilters: any) => ({
+                                    ...prevFilters,
+                                    minAge: value
+                                }))
                             }
                             }
                         />
@@ -111,10 +110,8 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                             placeholder={"maximum age"}
                             min={0} max={25}
                             onChange={(e) => {
-                                const value = parseInt(e.target.value);
-                                if(!isNaN(value)) {
-                                    setFilters((prevFilters: any) => ({...prevFilters, maxAge: parseInt(e.target.value)}))}
-                                }
+                                let value = e.target.value.trim() ? parseInt(e.target.value) : null;
+                                setFilters((prevFilters: any) => ({...prevFilters, maxAge: value}))}
                             }
                         />
                     </div>
@@ -123,7 +120,10 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                     <label>Breed
                     <Select
                         onChange={(e) => {
-                            if (e) setFilters((prevFilters: any) =>({...prevFilters, breed: e.value}))
+                            setFilters((prevFilters: any) => ({
+                                ...prevFilters,
+                                breed: e ? e.value : "",
+                            }));
                         }}
                         styles={{
                             control: (baseStyles) => ({
@@ -147,6 +147,7 @@ const PetFilter:React.FC<PetFilterProps> = ({filters, setFilters, favorites, set
                             }),
                         }}
                         placeholder={"breed"}
+                        isClearable={true}
                         options={dogBreedOptions}
                         value={dogBreedOptions.find((option) => option.value === filters.breed) || null}
                     />

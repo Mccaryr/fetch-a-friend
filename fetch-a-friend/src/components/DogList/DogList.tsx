@@ -8,17 +8,19 @@ type DogListProps = {
     data: {breed: string, age: number, name: string, id: string, zip_code: string, img:string}[],
     handleFavorite: (id: string) => void,
     favorites: string[],
-    setFilters: (filters: any) => void,
-    filters: {breed: string | null, sorted: string, from: number, size: number},
+    filters: {breed: string | null, sorted: string, size: number},
+    totalResults: number,
+    from: number,
+    setFrom: (value: number) => void,
 }
 
-export const DogList:React.FC<DogListProps> = ({data, handleFavorite, favorites, setFilters, filters}) => {
+export const DogList:React.FC<DogListProps> = ({data, handleFavorite, favorites, filters, totalResults, from, setFrom}) => {
 
     const handlePagination = (type: "back" | "forward") => {
         if(type === "back") {
-            setFilters((prevFilters: any) => ({...prevFilters, from: Math.max(0, filters.from - filters.size)}))
+            setFrom(Math.max(0, from - filters.size))
         } else {
-            setFilters((prevFilters: any) => ({...prevFilters, from: filters.from + filters.size}))
+            setFrom(from + filters.size)
         }
     }
 
@@ -31,12 +33,12 @@ export const DogList:React.FC<DogListProps> = ({data, handleFavorite, favorites,
         </div>
             {data && data.length > 0 ?
                 <div className={"nav-arrows-container"}>
-                    {filters.from !== 0 &&
+                    {from !== 0 &&
                         <button onClick={() => handlePagination("back")}>
                             <i className="fa-regular fa-circle-left"></i>
                         </button>
                     }
-                    {filters.from !== 1000 &&
+                    {filters.size < totalResults &&
                         <button onClick={() => handlePagination("forward")}>
                             <i className="fa-regular fa-circle-right"></i>
                         </button>
