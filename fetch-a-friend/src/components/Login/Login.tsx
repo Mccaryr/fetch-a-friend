@@ -1,6 +1,8 @@
 import {Formik} from "formik";
 import * as Yup from "yup";
-import {useAuth} from "../auth/AuthContext.tsx";
+import {useAuth} from "../../auth/AuthContext.tsx";
+import "./Login.scss"
+import DogWallpaper from "../../assets/faf-wallpaper.jpg"
 
 const Login = () => {
 
@@ -19,7 +21,10 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className={"login-background"}>
+        <div className={"form-container"}>
+            <h1 style={{margin:0}}>Login To</h1>
+            <h1>Fetch A Friend!</h1>
             <Formik
                 initialValues={{ name: '', email: '' }}
                 validationSchema={loginValidationSchema}
@@ -38,8 +43,9 @@ const Login = () => {
                       handleSubmit,
                       isSubmitting,
                   }) => (
-                    <form className="flex flex-col" onSubmit={handleSubmit}>
-                        <label>Name</label>
+                    <form className={"login-form"} onSubmit={handleSubmit}>
+                        <div>
+                        <label>Name
                         <input
                             type="text"
                             name="name"
@@ -47,9 +53,13 @@ const Login = () => {
                             onBlur={handleBlur}
                             value={values.name}
                             aria-label={"name"}
+                            placeholder={"Enter Name"}
                         />
-                        {errors.name && touched.name && errors.name}
-                        <label>Email</label>
+                        </label>
+                            <p style={{color:'red', margin:0}}>{errors.name && touched.name && errors.name}</p>
+                        </div>
+                        <div>
+                        <label>Email
                         <input
                             type="email"
                             name="email"
@@ -57,14 +67,19 @@ const Login = () => {
                             onBlur={handleBlur}
                             value={values.email}
                             aria-label={"email"}
+                            placeholder={"Enter Email"}
                         />
-                        {errors.email && touched.email && errors.email}
+                        </label>
+                            <p style={{color: 'red', margin:0}}>{errors.email && touched.email && errors.email}</p>
+                        </div>
                         <button type="submit" disabled={isSubmitting}>
-                            Submit
+                            Login
                         </button>
                     </form>
                 )}
             </Formik>
+        </div>
+            <div className={"image-container"}><img src={DogWallpaper} alt={"aesthetic dog wallpaper"} /></div>
         </div>
     )
 }

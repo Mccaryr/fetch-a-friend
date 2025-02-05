@@ -1,10 +1,11 @@
 import './App.css'
-import Login from "./components/Login.tsx";
+import Login from "./components/Login/Login.tsx";
 import { useAuth} from "./auth/AuthContext.tsx";
 import Dashboard from "./components/Dashboard/Dashboard.tsx";
 
 function App() {
  const {loggedIn} = useAuth();
+
   return (
     <>
         {loggedIn ?

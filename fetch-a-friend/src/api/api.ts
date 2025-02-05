@@ -36,7 +36,7 @@ export const getDogsSearch = async (params: any) => {
             sort: `breed:${params.sorted}`
         }
         const response = await axios.get(`${apiURL}/dogs/search`,
-            {params: filters}
+            {params: filters, withCredentials: true}
         );
         return response.data;
     } catch(e) {
@@ -46,7 +46,7 @@ export const getDogsSearch = async (params: any) => {
 
 export const getDogs = async (dogIds: string[]) => {
     try {
-        const response = await axios.post(`${apiURL}/dogs`, {dogIds});
+        const response = await axios.post(`${apiURL}/dogs`, {dogIds}, {withCredentials: true});
         return response.data;
     } catch (e) {
         console.log("Error getting dogs", e)
@@ -55,7 +55,7 @@ export const getDogs = async (dogIds: string[]) => {
 
 export const getMatch = async (dogIds: string[]) => {
     try {
-        const response = await axios.get(`${apiURL}/dogs/${dogIds}`);
+        const response = await axios.get(`${apiURL}/dogs/${dogIds}`, {withCredentials: true});
         return response.data;
     } catch (e) {
         console.log("Error getting match", e)
@@ -64,7 +64,7 @@ export const getMatch = async (dogIds: string[]) => {
 
 export const getLocations = async () => {
     try {
-        const response = await axios.get(`${apiURL}/locations`);
+        const response = await axios.get(`${apiURL}/locations`, {withCredentials: true});
         return response.data;
     } catch(e) {
         console.log("Error getting locations", e)
@@ -73,7 +73,7 @@ export const getLocations = async () => {
 
 export const getLocationSearch = async () => {
     try {
-        const response = await axios.get(`${apiURL}/locations/search`);
+        const response = await axios.get(`${apiURL}/locations/search`, {withCredentials: true});
         return response.data;
     } catch(e) {
         console.log("Error getting locations", e)
