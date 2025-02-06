@@ -9,7 +9,7 @@ type ButtonProps = {
 }
 const Button:React.FC<ButtonProps> = ({text, type, action, disabled}) => {
     return (
-        <button className="btn" type={type} disabled={disabled} onClick={action}>{text}</button>
+        <button className="btn" area-label={text || "submit"} type={type} disabled={disabled} onClick={action}>{text}</button>
     )
 }
 export default Button

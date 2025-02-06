@@ -6,7 +6,6 @@ import DogWallpaper from "../../assets/faf-wallpaper.jpg"
 import Button from "../Button/Button.tsx";
 
 const Login = () => {
-
     const { login } = useAuth();
 
     const loginValidationSchema = Yup.object().shape({
@@ -17,7 +16,7 @@ const Login = () => {
         .required("Name is required")
     })
 
-    const handleSubmit = async (values:any) => {
+    const submitHandler = async (values:any) => {
         login({name: values.name, email: values.email});
     }
 
@@ -30,7 +29,7 @@ const Login = () => {
                 initialValues={{ name: '', email: '' }}
                 validationSchema={loginValidationSchema}
                 onSubmit={(values, { setSubmitting }) => {
-                    handleSubmit(values).then(() => {
+                    submitHandler(values).then(() => {
                         setSubmitting(false);
                     })
                 }}
@@ -44,7 +43,7 @@ const Login = () => {
                       handleSubmit,
                       isSubmitting,
                   }) => (
-                    <form className={"login-form"} onSubmit={handleSubmit}>
+                    <form role="login-form" className={"login-form"} onSubmit={handleSubmit}>
                         <div>
                         <label>Name
                         <input

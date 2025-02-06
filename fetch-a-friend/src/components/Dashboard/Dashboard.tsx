@@ -12,7 +12,7 @@ const Dashboard = () => {
     const {logout} = useAuth()
     const [filters, setFilters] = useState<
         {
-            maxAge?: number | null; minAge: number | null;
+            maxAge: number | null; minAge: number | null;
             sorted: string; size: number;
             breed: string | null; zipCodes: string[] | null
         }
